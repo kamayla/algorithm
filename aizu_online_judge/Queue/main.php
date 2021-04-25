@@ -2,7 +2,7 @@
 
 class Main
 {
-    private $max = 100005;
+    private $max = 100005; //最大値が100000データなので、5つだけゆとりを持たせた最大値
     private $array = [];
     private $line;
     private $head = 0;
@@ -30,14 +30,16 @@ class Main
     public function execute()
     {
         while ($this->head !== $this->tail) {
-            # queueを取り出す。
+            # queueを取り出す
             $queue = $this->dequeue();
-            # 時間経過を引く
+            # 処理時間を引く
             $queue['time'] -= $this->line[1];
-            if ($queue['time'] > 0) { // 0より上のケースはまだ処理が完了していない。
+            if ($queue['time'] > 0) {
+                # 0より上のケースはまだ処理が完了していないとき。
                 # 経過時間を保存
                 $this->past += $this->line[1];
-                # 処理が完了していないので後ろに追加し。
+
+                # 処理が完了していないので後ろに追加する。
                 $this->enqueue($queue);
             } else { // 
                 # 経過時間を保存
@@ -47,7 +49,13 @@ class Main
             }
         }
     }
-    private function dequeue()
+
+    /**
+     * queueを配列から取り出す
+     *
+     * @return void
+     */
+    private function dequeue(): array
     {
         $queue = $this->array[$this->head];
         $this->array[$this->head] = null;
@@ -59,7 +67,13 @@ class Main
         return $queue;
     }
 
-    private function enqueue($queue)
+    /**
+     * queueを配列に入れる
+     *
+     * @param array $queue
+     * @return void
+     */
+    private function enqueue(array $queue): void
     {
         $this->array[$this->tail] = $queue;
         if ($this->tail + 1 === $this->max) {
